@@ -1,0 +1,237 @@
+<html>
+<head>
+    <title>CodeHub - d3 tutorial</title>
+
+    <!-- d3 uses unicode characters for pi and such so we must set the character-set -->
+    <meta http-equiv="content-type" content="text/html; charset=UTF8">
+
+    <!-- include a non-minimised version of d3 from a local folder for our testing -->
+    <script type="text/javascript" src="./lib/d3.js"></script>
+
+    <!-- lets include a style sheet too -->
+    <link rel="stylesheet" href="./lib/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="d3tutorial.css">
+
+<body>
+
+<div id="welcome">
+    <h2>CodeHubD3 Tutorial</h2>
+    <p>Open this html file in a text editor. We will iteratively uncomment the code sections, find out what they and discuss how they work.</p>    
+</div>
+
+<div id="t1">
+    <h3>Tutorial 1 - Documents</h3>
+    <p>
+    d3 manipulates html pages using the document object model, the DOM. d3 is often associated with SVG but it can manipulate any DOM element. d3 support css-style selectors like jquery. You typicall see d3 used in the same "method chaining" style.
+    </p>
+
+    <div id="demo1">
+    </div>
+
+    <script>
+         // d3.select("#demo1").append("p").text("hello world!");
+    </script>
+</div>
+
+
+<div id="t2">
+    <h3>Tutorial 2 - Driving with data</h3>
+    <p>
+    d3 is all about data-binding. We use selectAll and enter to bind data values to new elements of the dom. When we give d3 instructions, we supply functions that take data for a node as argument. This allows our visualisaton to be specific to the data supplied.
+    </p>
+    <ul>
+        <li>selectall = selects all the elements that do or will exist</li>
+        <li>data = bind the selected elements to the given dataset</li>
+        <li>enter = create new nodes for incoming data (there is an exit for removing)</li>
+    </ul>
+
+    <h4>Tasks</h4>
+    <ol>
+        <li>examine the paragraph element in the inspector - can you see the __data__ element?</li>
+        <li>change the last line to be: .text(function(d) { return "data = " + d; });</li>
+        <li>add an extra last line: .style("color", function(d) { return (d>15) ? "blue" : "red"});</li>
+    </ol>
+
+    <div id="demo2">
+    </div>
+
+    <script>
+
+/*
+        var dataset = [ 5, 10, 15, 20, 25 ];
+
+        d3.select("#demo2")
+            .selectAll("p")
+            .data(dataset)
+            .enter()
+            .append("p")
+            .text("oh hai!");
+            //.text(function(d) { return "data = " + d; })
+            //.style("color", function(d) { return (d>15) ? "blue" : "red"});
+*/
+    </script>
+
+</div>
+
+<div id="t4">
+    <h3>Tutorial 3 - SVG</h3>
+    <p>
+        d3 excels at manipulating Scalable Vector Graphics (SVG) for producing clean elegant data visualiations that scale correctly for all devices. SVG is composed of elements just like HTML.
+    </p>
+    <ul>
+        <li>attr(name, value) = sets the named attribute, can be used on both html or svg elements</li>
+        <li>function(d, i) = d3 callbacks supply the index of the data element as a second param</li>
+    </ul>
+
+    <h4>Tasks</h4>
+    <ol>
+        <li>Inspect the element containing the circles - see how it matches the data and attr?</li>
+        <li>Change the colour of the circles using svg attributes: .attr("fill", "yellow")</li>
+    </ol>
+
+    <div id="demo4">
+    </div>
+
+    <script>
+
+    /*
+        // view settings
+        var width = 500;
+        var height = 50;
+        var spacing = 50;
+        var padding = 25;
+
+        var dataset2 = [ 5, 10, 15, 20, 25 ];
+
+        var svg = d3.select("#demo4")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        var circles = svg.selectAll("circle")
+            .data(dataset)
+            .enter()
+            .append("circle")
+            //.attr("fill", "yellow")
+
+        circles
+            .attr("cx", function(d, i) { return (i * spacing) + padding; })
+            .attr("cy", height/2)
+            .attr("r", function(d) { return d; });
+    */
+    </script>
+
+</div>
+
+<div id="t5">
+    <h3>Tutorial 4 - Bar chart</h3>
+    <p>
+        d3 is often used for charting data but unlike classic charting libraries, it does not come with fixed charts for you to configure, instead you are expected to compose charts yourself out of smaller pieces.
+    </p>
+    <ul>
+        <li>attr(name, value) = set the named attribute, can be used on both html or svg</li>
+        <li>function(d, i) = d3 callbacks can also supply the data index as a second param</li>
+    </ul>
+
+    <h4>Tasks</h4>
+    <ol>
+        <li>Set the y coordinate so the bars grow up: height - (d * 4)</li>
+        <li>Set the fill colour relative to data: return "rgb(0, 0, " + (d * 10) + ")"</li>
+    </ol>
+
+    <div id="demo5">
+    </div>
+
+    <script>
+
+/*
+        // view settings
+        var width = 500;
+        var height = 100;
+        var spacing = 50;
+        var padding = 2;
+
+        var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13, 11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
+
+        svg = d3.select("#demo5")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        svg.selectAll("rect")
+           .data(dataset)
+           .enter()
+           .append("rect")
+           .attr("x", function(d, i) { return i * (width / dataset.length); })
+           .attr("y", function(d) { return 0; })
+           //.attr("y", function(d) { return height - (d * 4); })
+           .attr("width", width / dataset.length - padding)
+           .attr("height", function(d) { return d * 4; })
+           //.attr("fill", function(d) { return "rgb(0, 0, " + (d * 10) + ")"; });
+
+        svg.selectAll("text")
+            .data(dataset)
+            .enter()
+            .append("text")
+            .text(function(d) { return d; })
+            .attr("text-anchor", "middle")
+            .attr("x", function(d, i) { return i * (width / dataset.length) + (width / dataset.length - padding) / 2; })
+            .attr("y", function(d) { return height - (d * 4) + 14; })
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "11px")
+            .attr("fill", "white");
+*/
+    </script>
+
+</div>
+
+<div id="t6">
+    <h3>Tutorial 5 - Transitions</h3>
+    <p>
+        d3 visualiations come alive with transitions and interactivity.
+    </p>
+    <ul>
+        <li>attr(name, value) = set the named attribute, can be used on both html or svg</li>
+        <li>function(d, i) = d3 callbacks can also supply the data index as a second param</li>
+    </ul>
+
+    <h4>Tasks</h4>
+    <ol>
+        <li>Can you do better than these two (terrible) transitions?</li>
+    </ol>
+
+    <div id="demo6">
+    </div>
+
+    <script>
+
+    /*
+
+        function wiggle() {
+            svg.selectAll("text").attr("fill", "white");
+
+            svg.selectAll("text").transition()
+                .duration(750)
+                .delay(function(d, i) { return i * 10; })
+                .attr("fill", function(d) { return "rgb(0, 0, " + (d * 10) + ")"; });
+        }
+
+        function woggle() {
+            
+            svg.selectAll("rect").transition()
+                .duration(750)
+                .delay(function(d, i) { return i * 10; })
+                .attr("transform", function(d) { return "scale(" + 2 + ")"; });
+        }
+
+        */
+
+    </script>
+
+    <button onclick="wiggle()" class="btn">Wiggle</button>
+    <button onclick="woggle()" class="btn">Woggle</button>
+
+</div>
+
+</body>
+<html>
